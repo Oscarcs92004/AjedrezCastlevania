@@ -24,4 +24,9 @@ public class Usuarios {
         puntos = 0;
         activo = true;
     }
+    
+    public void aumentarPuntaje(){
+    
+    }
+    
 }
