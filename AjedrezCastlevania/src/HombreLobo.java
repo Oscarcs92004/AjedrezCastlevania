@@ -10,4 +10,22 @@
  */
 public class HombreLobo extends Piezas{
     
+    public HombreLobo(){
+        super(5,5,2);
+    }
+    
+    @Override
+    public void ataque(){
+    
+    }
+
+    @Override
+    public void movimientoEspecial(){
+
+    }
+    
+    @Override
+    public void mover(){
+    
+    }
 }

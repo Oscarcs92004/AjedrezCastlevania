@@ -13,6 +13,12 @@ public class Piezas {
     private int danio;
     private int escudo;
     
+    public Piezas(int vida, int danio, int escudo){
+        this.vida = vida;
+        this.danio = danio;
+        this.escudo = escudo;
+    }
+    
     public void ataque(){
     
     }
@@ -24,5 +30,4 @@ public class Piezas {
     public void mover(){
     
     }
-
 }

@@ -9,5 +9,23 @@
  * @author oscar
  */
 public class Vampiro extends Piezas{
+   
+    public Vampiro(){
+        super(3,4,5);
+    }
     
+    @Override
+    public void ataque(){
+    
+    }
+
+    @Override
+    public void movimientoEspecial(){
+
+    }
+    
+    @Override
+    public void mover(){
+    
+    }
 }

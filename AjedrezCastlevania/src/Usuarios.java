@@ -20,5 +20,8 @@ public class Usuarios {
     public Usuarios(String nombre, String contra){
         this.nombre = nombre;
         this.contra = contra;
+        fechaRegistro = Calendar.getInstance();
+        puntos = 0;
+        activo = true;
     }
 }

@@ -10,4 +10,22 @@
  */
 public class Zombie extends Piezas{
     
+    public Zombie(){
+        super(1,1,0);
+    }
+    
+    @Override
+    public void ataque(){
+    
+    }
+
+    @Override
+    public void movimientoEspecial(){
+        // no tiene se queda en blanco
+    }
+    
+    @Override
+    public void mover(){
+    
+    }
 }

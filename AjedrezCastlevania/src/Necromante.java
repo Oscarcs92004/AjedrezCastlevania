@@ -10,4 +10,22 @@
  */
 public class Necromante extends Piezas{
     
+    public Necromante(){
+        super(4,3,1);
+    }
+    
+    @Override
+    public void ataque(){
+    
+    }
+
+    @Override
+    public void movimientoEspecial(){
+
+    }
+    
+    @Override
+    public void mover(){
+    
+    }
 }
