@@ -8,7 +8,7 @@
  *
  * @author oscar
  */
-public class Piezas {
+public abstract class Piezas {
     private int vida;
     private int danio;
     private int escudo;
@@ -19,15 +19,7 @@ public class Piezas {
         this.escudo = escudo;
     }
     
-    public void ataque(){
-    
-    }
-
-    public void movimientoEspecial(){
-
-    }
-    
-    public void mover(){
-    
-    }
+    public abstract void ataque(); 
+    public abstract void movimientoEspecial();
+    public abstract void mover();
 }
