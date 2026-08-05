@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
@@ -37,7 +39,22 @@ public class GUI extends JFrame{
         titulo.setFont(new Font("Serif", Font.BOLD, 30));
         panel.add(titulo, BorderLayout.NORTH);
         
+        JPanel botones = new JPanel();
+        botones.setLayout(new GridLayout(3,1,20,20));
+        iniciar = new JButton("Iniciar sesion");
+        salir = new JButton("Salir");
+        crearJugador = new JButton("Crear Jugador");
         
+        iniciar.setFont(new Font("Arial",Font.BOLD, 18));
+        salir.setFont(new Font("Arial",Font.BOLD, 18));
+        crearJugador.setFont(new Font("Arial",Font.BOLD, 18));
+        
+        botones.add(iniciar);
+        botones.add(crearJugador);
+        botones.add(salir);
+        
+        panel.add(botones);
+        add(panel);
         setVisible(true);
     }
     
