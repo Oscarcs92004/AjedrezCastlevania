@@ -55,7 +55,17 @@ public class GUI extends JFrame{
         
         panel.add(botones);
         add(panel);
-        setVisible(true);
+        salir.addActionListener(e -> System.exit(0));
+        
+        iniciar.addActionListener(e-> {
+            
+        });
+        
+        crearJugador.addActionListener(e-> {
+            
+        });
+        
+        setVisible(true);        
     }
     
     public GUI(){
