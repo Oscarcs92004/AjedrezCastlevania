@@ -24,6 +24,20 @@ public class GUI extends JFrame{
     private JButton crearJugador;
     private JButton salir;
     private JLabel titulo;
+    private JPanel panel;
+    
+    public void mostrarMenu(){
+        dispose();
+        new GUI();
+    }
+    
+    public void cambiarPanel(JPanel nuevoPanel){
+        getContentPane().removeAll();
+        panel = nuevoPanel;
+        add(nuevoPanel);
+        revalidate();
+        repaint();
+    }
     
     private void inicializarComponentes(){
         setTitle("Vampire Wargame");
@@ -32,7 +46,7 @@ public class GUI extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         
-        JPanel panel = new JPanel();
+        panel = new JPanel();
         panel.setLayout(new BorderLayout());
         
         titulo = new JLabel("Vampire Wargame", SwingConstants.CENTER);
@@ -58,11 +72,11 @@ public class GUI extends JFrame{
         salir.addActionListener(e -> System.exit(0));
         
         iniciar.addActionListener(e-> {
-            
+            cambiarPanel(new Login(this));
         });
         
         crearJugador.addActionListener(e-> {
-            
+            cambiarPanel(new CrearJugador(this));
         });
         
         setVisible(true);        
