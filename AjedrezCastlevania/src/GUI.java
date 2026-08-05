@@ -4,13 +4,10 @@
  * and open the template in the editor.
  */
 
-
 /**
  *
  * @author oscar
  */
-public class Principal{
+public class GUI {
     
-    public static void main(String args[]){
-    }
 }
