@@ -10,7 +10,7 @@ import java.util.Calendar;
  * @author oscar
  */
 public class Usuarios {
-    private ArrayList<Usuarios> u = new ArrayList<>();
+    private static ArrayList<Usuarios> u = new ArrayList<>();
     private String nombre;
     private String contra;
     private Calendar fechaRegistro;
@@ -23,6 +23,19 @@ public class Usuarios {
         fechaRegistro = Calendar.getInstance();
         puntos = 0;
         activo = true;
+    }
+    
+    public static void agregarUsuario(Usuarios user){
+        u.add(user);
+    }
+    
+    public static boolean iniciarSesion(String user, String contra){
+        for(Usuarios usuario : u){
+            if(usuario.nombre.equals(user) && usuario.contra.equals(contra)){
+                return true;
+            }
+        }
+        return false;
     }
     
     public void aumentarPuntaje(){
