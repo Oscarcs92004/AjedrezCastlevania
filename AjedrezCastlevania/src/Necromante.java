@@ -24,8 +24,4 @@ public class Necromante extends Piezas{
 
     }
     
-    @Override
-    public void mover(){
-    
-    }
 }

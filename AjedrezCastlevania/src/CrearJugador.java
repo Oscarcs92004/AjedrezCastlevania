@@ -44,12 +44,18 @@ public class CrearJugador extends JPanel{
             javax.swing.JOptionPane.showMessageDialog(this,"Las contraseñas no coinciden.","Error",javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
+        boolean creado = Usuarios.crearUsuario(usuario,contra);
+        if(creado){
+            javax.swing.JOptionPane.showMessageDialog(this,"Jugador creado correctamente.");    
+            txtUser.setText("");
+            txtContra.setText("");
+            txtConfirmar.setText("");
+            ventana.mostrarMenu();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this,"El nombre de usuario ya existe."); 
+        }
         
-        javax.swing.JOptionPane.showMessageDialog(this,"Jugador creado correctamente.");
         
-        txtUser.setText("");
-        txtContra.setText("");
-        txtConfirmar.setText("");
     }
     
     private void inicializar(){

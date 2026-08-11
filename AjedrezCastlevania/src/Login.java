@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -29,7 +30,22 @@ public class Login extends JPanel{
     private JButton iniciar;
     private JButton regresar;
 
-    
+    private void iniciarSesion(){
+        String user = txtUser.getText().trim();
+
+        String contraseña = new String(txtContra.getPassword());
+        if (user.isEmpty() || contraseña.isEmpty()) {
+            JOptionPane.showMessageDialog( this,"Ingrese usuario y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Usuarios usuarioEncontrado = Usuarios.iniciarSesion(user, contraseña);
+        if (usuarioEncontrado != null) {
+            JOptionPane.showMessageDialog( this, "Inicio de sesión exitoso.");
+            ventana.cambiarPanel(new MenuPrincipal(ventana,usuarioEncontrado));
+        } else {
+            JOptionPane.showMessageDialog( this, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }    
     
     private void inicializarComponentes(){
         setLayout(new BorderLayout());
@@ -74,6 +90,10 @@ public class Login extends JPanel{
             } else {
                 txtContra.setEchoChar((char)0);
             }
+        });
+        
+        iniciar.addActionListener(e -> {
+            iniciarSesion();
         });
             
     }

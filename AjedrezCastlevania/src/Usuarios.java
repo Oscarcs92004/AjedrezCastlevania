@@ -24,18 +24,53 @@ public class Usuarios {
         puntos = 0;
         activo = true;
     }
+
+    public static ArrayList<Usuarios> getU() {
+        return u;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getContra() {
+        return contra;
+    }
+
+    public Calendar getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public int getPuntos() {
+        return puntos;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
     
     public static void agregarUsuario(Usuarios user){
         u.add(user);
     }
     
-    public static boolean iniciarSesion(String user, String contra){
-        for(Usuarios usuario : u){
-            if(usuario.nombre.equals(user) && usuario.contra.equals(contra)){
-                return true;
+     public static boolean crearUsuario(String nombre,String contra) {
+        for (Usuarios usuario : u) {
+            if (usuario.getNombre().equalsIgnoreCase(nombre)) {
+                return false;
             }
         }
-        return false;
+        Usuarios nuevoUsuario = new Usuarios(nombre, contra);
+        u.add(nuevoUsuario);
+        return true;
+    }
+     
+    public static Usuarios iniciarSesion(String user, String contra){
+        for(Usuarios usuario : u){
+            if(usuario.getNombre().equals(user) && usuario.getContra().equals(contra) && usuario.isActivo()){
+                return usuario;
+            }
+        }
+        return null;
     }
     
     public void aumentarPuntaje(){

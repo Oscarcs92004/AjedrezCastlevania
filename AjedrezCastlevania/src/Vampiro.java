@@ -24,8 +24,5 @@ public class Vampiro extends Piezas{
 
     }
     
-    @Override
-    public void mover(){
-    
-    }
+  
 }

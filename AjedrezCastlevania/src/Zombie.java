@@ -24,8 +24,4 @@ public class Zombie extends Piezas{
         // no tiene se queda en blanco
     }
     
-    @Override
-    public void mover(){
-    
-    }
 }

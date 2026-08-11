@@ -24,8 +24,5 @@ public class HombreLobo extends Piezas{
 
     }
     
-    @Override
-    public void mover(){
-    
-    }
+
 }

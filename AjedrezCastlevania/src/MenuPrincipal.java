@@ -16,7 +16,7 @@ import javax.swing.SwingConstants;
  */
 public class MenuPrincipal extends JPanel{
     private GUI ventana;
-    private String usuario;
+    private Usuarios usuario;
     private JButton jugar;
     private JButton miCuenta;
     private JButton reportes;
@@ -27,7 +27,7 @@ public class MenuPrincipal extends JPanel{
         JLabel titulo = new JLabel("Vampire Wargame",SwingConstants.CENTER);
         titulo.setFont(new Font("Serif", Font.BOLD, 40));
         add(titulo, BorderLayout.NORTH);
-        JLabel bienvenida = new JLabel("Bienvenido, " + usuario,SwingConstants.CENTER);
+        JLabel bienvenida = new JLabel("Bienvenido, " + usuario.getNombre(),SwingConstants.CENTER);
         bienvenida.setFont(new Font("Arial", Font.BOLD, 22));
         add(bienvenida, BorderLayout.CENTER);
         JPanel panelBotones = new JPanel();
@@ -46,7 +46,7 @@ public class MenuPrincipal extends JPanel{
         panelBotones.add(cerrarSesion);
         add(panelBotones, BorderLayout.SOUTH);
         jugar.addActionListener(e->{
-            //ventana.cambiarPanel(); falta crear clase nueva partida
+            ventana.cambiarPanel( new NuevaPartida(ventana,usuario));
         });
         
         miCuenta.addActionListener(e->{
@@ -62,7 +62,7 @@ public class MenuPrincipal extends JPanel{
         });
     }
     
-    public MenuPrincipal(GUI ventana, String usuario){
+    public MenuPrincipal(GUI ventana, Usuarios usuario){
         this.ventana = ventana;
         this.usuario = usuario;
         
