@@ -30,6 +30,28 @@ public class CrearJugador extends JPanel{
     private JButton crear;
     private JButton regresar;
     
+    private void crearJugador(){
+        String usuario = txtUser.getText();
+        String contra = new String(txtContra.getPassword());
+        String confirmar = new String(txtConfirmar.getPassword());
+        
+        if(usuario.isEmpty() || contra.isEmpty() || confirmar.isEmpty()){
+            javax.swing.JOptionPane.showMessageDialog(this,"Todos los campos son obligatorios.","Error",javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(!contra.equals(confirmar)){
+            javax.swing.JOptionPane.showMessageDialog(this,"Las contraseñas no coinciden.","Error",javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        javax.swing.JOptionPane.showMessageDialog(this,"Jugador creado correctamente.");
+        
+        txtUser.setText("");
+        txtContra.setText("");
+        txtConfirmar.setText("");
+    }
+    
     private void inicializar(){
         setLayout(new BorderLayout());
     
@@ -71,7 +93,31 @@ public class CrearJugador extends JPanel{
         formulario.add(confirmar, limites);
         limites.gridx = 1;
         formulario.add(txtConfirmar, limites);
+     
+        crear = new JButton("Crear Jugador");
+        regresar = new JButton("Regresar");
         
+        crear.setPreferredSize(new Dimension(180,45));
+        regresar.setPreferredSize(new Dimension(180,45));
+        crear.setFont(new Font("Arial", Font.BOLD, 16));
+        regresar.setFont(new Font("Arial", Font.BOLD, 16));
+        
+        JPanel panelBotones = new JPanel();
+        panelBotones.add(crear);
+        panelBotones.add(regresar);
+        limites.gridx = 0;
+        limites.gridy = 3;
+        limites.gridwidth = 2;
+        formulario.add(panelBotones,limites);
+        add(formulario, BorderLayout.CENTER);
+        
+        regresar.addActionListener(e-> {
+            ventana.mostrarMenu();
+        });
+        
+        crear.addActionListener(e-> {
+            crearJugador();
+        });
     }
     
     public CrearJugador(GUI ventana){
