@@ -44,6 +44,33 @@ public class CrearJugador extends JPanel{
         limites.insets = new Insets(10,10,10,10);
         limites.fill = GridBagConstraints.HORIZONTAL;
         
+        JLabel usuario = new JLabel("Nombre Usuario");
+        txtUser = new JTextField();
+        txtUser.setPreferredSize(new Dimension(300,40));
+        
+        limites.gridx = 0;
+        limites.gridy = 0;
+        formulario.add(usuario, limites);
+        limites.gridx = 1;
+        formulario.add(txtUser, limites);
+        
+        JLabel contra = new JLabel("Contraseña: ");
+        txtContra = new JPasswordField();
+        txtContra.setPreferredSize(new Dimension(300,40));
+        limites.gridx = 0;
+        limites.gridy = 1;
+        formulario.add(contra, limites);
+        limites.gridx = 1;
+        formulario.add(txtContra, limites);
+        
+        JLabel confirmar = new JLabel("Confirmar contraseña: ");
+        txtConfirmar = new JPasswordField();
+        txtConfirmar.setPreferredSize(new Dimension(300,40));
+        limites.gridx = 0;
+        limites.gridy = 2;
+        formulario.add(confirmar, limites);
+        limites.gridx = 1;
+        formulario.add(txtConfirmar, limites);
         
     }
     
