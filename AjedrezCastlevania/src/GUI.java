@@ -31,8 +31,10 @@ public class GUI extends JFrame{
     private JPanel panel;
     
     public void mostrarMenu(){
-        dispose();
-        new GUI();
+        getContentPane().removeAll();
+        inicializarMenu();
+        revalidate();
+        repaint();
     }
     
     public void cambiarPanel(JPanel nuevoPanel){
@@ -44,6 +46,10 @@ public class GUI extends JFrame{
     }
     
     private void inicializarComponentes(){
+        mostrarMenu();
+    }
+    
+    private void inicializarMenu(){
         setTitle("Vampire Wargame");
         setSize(1200,900);
         setLocationRelativeTo(null);
