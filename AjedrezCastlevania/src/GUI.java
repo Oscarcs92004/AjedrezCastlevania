@@ -56,7 +56,7 @@ public class GUI extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         
-         panel = new JPanel(new BorderLayout()) {
+        panel = new JPanel(new BorderLayout()) {
             private Image imagenFondo = new ImageIcon(getClass().getResource("/Iconos/portadaJuego.png")).getImage();
             @Override
             protected void paintComponent(java.awt.Graphics g) {

@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 
 /*
@@ -44,25 +45,69 @@ public class NuevaPartida extends JPanel{
     private String[] piezas = {"Vampiro", "Necromante", "Hombre Lobo", "Zombie"};
     private Random random;
     private Piezas[][] piezasTablero;
-    private ImageIcon imagenHombreLobo;
-    private ImageIcon imagenVampiro;
-    private ImageIcon imagenNecromante;
-    private ImageIcon imagenZombie;
+    private ImageIcon imagenHombreLoboBlanco;
+    private ImageIcon imagenVampiroBlanco;
+    private ImageIcon imagenNecromanteBlanco;
+    private ImageIcon imagenZombieBlanco;
+    private ImageIcon imagenHombreLoboNegro;
+    private ImageIcon imagenVampiroNegro;
+    private ImageIcon imagenNecromanteNegro;
+    private ImageIcon imagenZombieNegro;
+    private int jugadorActual = 1;
+    private JLabel[] iconosRuleta;
+    private ImageIcon iconoVampiro;
+    private ImageIcon iconoNecromante;
+    private ImageIcon iconoHombreLobo;
+    private ImageIcon imagenRuleta;
+    private ImageIcon iconoVampiroNegro;
+    private ImageIcon iconoNecromanteNegro;
+    private ImageIcon iconoHombreLoboNegro;
 
-
-    private ImageIcon obtenerImagen(Piezas pieza,boolean jugador1) {
-        boolean blanco = jugador1;
-        if (pieza instanceof HombreLobo) {
-            return cambiarColor(imagenHombreLobo,blanco);
-        } else if (pieza instanceof Vampiro) {
-            return cambiarColor(imagenVampiro,blanco);
-        } else if (pieza instanceof Necromante) {
-            return cambiarColor(imagenNecromante,blanco);
-        } else if (pieza instanceof Zombie) {
-            return cambiarColor(imagenZombie,blanco);
+    private ImageIcon convertirNegro(ImageIcon original) {
+        if (original == null) {
+            return null;
         }
-        return null;
+        Image imagen = original.getImage();
+        BufferedImage nuevaImagen = new BufferedImage(imagen.getWidth(null),imagen.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = nuevaImagen.createGraphics();
+        g2.drawImage(imagen, 0, 0, null);
+        g2.dispose();
+        for (int x = 0; x < nuevaImagen.getWidth(); x++) {
+            for (int y = 0; y < nuevaImagen.getHeight(); y++) {
+                int pixel = nuevaImagen.getRGB(x, y);
+                int alpha = (pixel >> 24) & 0xff;
+                if (alpha != 0) {
+                    nuevaImagen.setRGB(x,y,(alpha << 24));
+                }
+            }
+        }
+        return new ImageIcon(nuevaImagen);
     }
+    
+    private void cargarImagenesRuleta() {
+        imagenRuleta = cargarImagen("src/Iconos/Ruleta.png",300,300);
+        iconoVampiro = cargarImagen("src/Iconos/IconoVampiro.png",120,120);
+        iconoNecromante = cargarImagen("src/Iconos/IconoNecromante.png",120,120);
+        iconoHombreLobo = cargarImagen("src/Iconos/IconoHombreLobo.png",120,120);
+
+        iconoVampiroNegro = convertirNegro(iconoVampiro);
+        iconoNecromanteNegro = convertirNegro(iconoNecromante);
+        iconoHombreLoboNegro = convertirNegro(iconoHombreLobo);
+    }
+    
+    private ImageIcon obtenerImagen(Piezas pieza,boolean jugador1) {
+        
+        if (pieza instanceof HombreLobo) {
+            return jugador1 ? imagenHombreLoboBlanco : imagenHombreLoboNegro;
+            } else if (pieza instanceof Vampiro) {
+                return jugador1 ? imagenVampiroBlanco : imagenVampiroNegro;
+            } else if (pieza instanceof Necromante) {
+                return jugador1 ? imagenNecromanteBlanco : imagenNecromanteNegro;
+            } else if (pieza instanceof Zombie) {
+                return jugador1 ? imagenZombieBlanco : imagenZombieNegro;
+            }
+            return null;
+        }
     
     private void actualizarTablero() {
 
@@ -76,7 +121,7 @@ public class NuevaPartida extends JPanel{
                 } else {
                     casilla.setText("");
                     boolean jugador1 = pieza.getJugador() == 1;
-                    ImageIcon imagen =obtenerImagen(pieza,jugador1);
+                    ImageIcon imagen = obtenerImagen(pieza,jugador1);
                     casilla.setIcon(imagen);
                 }
             }
@@ -109,47 +154,13 @@ public class NuevaPartida extends JPanel{
         piezasTablero[5][5] = new HombreLobo();
         piezasTablero[5][5].setJugador(2);
         
-        
         actualizarTablero();
-    }
-
-    private ImageIcon cambiarColor( ImageIcon original, boolean blanco) {
-        if (original == null) {
-            return null;
-        }
-        Image imagen = original.getImage();
-        int ancho = imagen.getWidth(null);
-        int alto = imagen.getHeight(null);
-        BufferedImage nuevaImagen = new BufferedImage( ancho, alto, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = nuevaImagen.createGraphics();
-        g.drawImage( imagen, 0, 0, null);
-        g.dispose();
-        for (int x = 0; x < ancho; x++) {
-            for (int y = 0; y < alto; y++) {
-                int pixel = nuevaImagen.getRGB(x, y);
-                int alpha = (pixel >> 24) & 0xff;
-                if (alpha == 0) {
-                    continue;
-                }
-                Color color = new Color(pixel, true);
-                Color nuevoColor;
-                if (blanco) {
-                    nuevoColor = new Color( 255, 255, 255, alpha);
-                } else {
-                    nuevoColor = new Color( 0, 0, 0, alpha);
-                }
-                nuevaImagen.setRGB( x, y, nuevoColor.getRGB());
-            }
-        }
-
-        return new ImageIcon(nuevaImagen);
-        }
-        
+    }   
     
-    private ImageIcon cargarImagen(String ruta) {
+    private ImageIcon cargarImagen(String ruta, int ancho, int alto) {
         try {
             BufferedImage imagen = ImageIO.read(new File(ruta));
-            Image imagenEscalada = imagen.getScaledInstance( 60, 60, Image.SCALE_SMOOTH );
+            Image imagenEscalada = imagen.getScaledInstance(ancho,alto, Image.SCALE_SMOOTH );
             return new ImageIcon(imagenEscalada);
         } catch (IOException e) {
             System.out.println( "No se pudo cargar: " + ruta);
@@ -159,13 +170,14 @@ public class NuevaPartida extends JPanel{
     
     private void cargarImagenes() {
 
-        imagenHombreLobo = cargarImagen("src/Iconos/hombreLobo.png");
-
-        imagenVampiro = cargarImagen("src/Iconos/vampiro.png");
-
-        imagenNecromante = cargarImagen("src/Iconos/necromante.png");
-
-        imagenZombie = cargarImagen("src/Iconos/zombie.png");
+        imagenHombreLoboBlanco = cargarImagen("src/Iconos/HombreLoboBlanco.png",70,90);
+        imagenHombreLoboNegro = cargarImagen("src/Iconos/HombreLoboNegro.png",70,90);
+        imagenVampiroBlanco = cargarImagen("src/Iconos/VampiroBlanco.png",70,90);
+        imagenVampiroNegro = cargarImagen("src/Iconos/VampiroNegro.png",70,90);
+        imagenNecromanteBlanco = cargarImagen("src/Iconos/NecromanteBlanco.png",70,90);
+        imagenNecromanteNegro = cargarImagen("src/Iconos/NecromanteNegro.png",70,90);
+        imagenZombieBlanco = cargarImagen("src/Iconos/ZombieBlanco.png",70,90);
+        imagenZombieNegro = cargarImagen("src/Iconos/ZombieNegro.png",70,90);
     }
 
     private void seleccionarPieza(int fila, int columna){
@@ -198,24 +210,90 @@ public class NuevaPartida extends JPanel{
         
     }
     
-    private void crearPanelRuleta(){
-        panelRuleta = new JPanel();
+    private void actualizarRuleta() {
+        if (iconosRuleta == null || piezasTablero == null) {
+            return;
+        }
+        int vampiros = 0;
+        int necromantes = 0;
+        int hombresLobo = 0;
 
-        panelRuleta.setPreferredSize(new Dimension(250, 0));
-        panelRuleta.setLayout(new BorderLayout(10, 10));
+        for (int fila = 0; fila < 6; fila++) {
+            for (int columna = 0; columna < 6; columna++) {
+
+                Piezas p = piezasTablero[fila][columna];
+
+                if (p == null) {
+                    continue;
+                }
+
+                if (p.getJugador() != jugadorActual) {
+                    continue;
+                }
+
+                if (p instanceof Vampiro) {
+                    vampiros++;
+                }
+
+                else if (p instanceof Necromante) {
+                    necromantes++;
+                }
+
+                else if (p instanceof HombreLobo) {
+                    hombresLobo++;
+                }
+            }
+        }
+        iconosRuleta[0].setIcon(vampiros >= 1? iconoVampiro: iconoVampiroNegro);
+        iconosRuleta[1].setIcon(necromantes >= 2? iconoNecromante: iconoNecromanteNegro);
+        iconosRuleta[2].setIcon(hombresLobo >= 1? iconoHombreLobo: iconoHombreLoboNegro);
+        iconosRuleta[5].setIcon(vampiros >= 2? iconoVampiro: iconoVampiroNegro);
+        iconosRuleta[4].setIcon(necromantes >= 1? iconoNecromante: iconoNecromanteNegro);
+        iconosRuleta[3].setIcon(hombresLobo >= 2? iconoHombreLobo: iconoHombreLoboNegro);
+        panelRuleta.revalidate();
+        panelRuleta.repaint();
+    }
+    
+    private void crearPanelRuleta(){
+        panelRuleta = new JPanel(new BorderLayout(5,5));
+
+        panelRuleta.setPreferredSize(new Dimension(330, 400));
         JLabel titulo = new JLabel("Ruleta",SwingConstants.CENTER);
 
         titulo.setFont(new Font("Arial", Font.BOLD, 24));
 
         panelRuleta.add(titulo,BorderLayout.NORTH);
+        cargarImagenesRuleta();
+        JLayeredPane ruletaVisual = new JLayeredPane();
+        ruletaVisual.setPreferredSize(new Dimension(320,320));
+        JLabel fondoRuleta = new JLabel(imagenRuleta);
+        fondoRuleta.setBounds(10,10,300,300);
+        ruletaVisual.add(fondoRuleta, JLayeredPane.DEFAULT_LAYER);
+        iconosRuleta = new JLabel[6];
+        
+        for (int i = 0; i < 6; i++) {
+
+            iconosRuleta[i] = new JLabel();
+            iconosRuleta[i].setHorizontalAlignment(SwingConstants.CENTER);
+            iconosRuleta[i].setVerticalAlignment(SwingConstants.CENTER);
+            ruletaVisual.add(iconosRuleta[i],JLayeredPane.PALETTE_LAYER);
+        }
+        iconosRuleta[0].setBounds(105, 60, 55, 55);
+        iconosRuleta[1].setBounds(175, 60, 55, 55);
+        iconosRuleta[2].setBounds(55, 135, 55, 55);
+        iconosRuleta[3].setBounds(215, 135, 55, 55);
+        iconosRuleta[4].setBounds(105, 200, 55, 55);
+        iconosRuleta[5].setBounds(175, 200, 55, 55);
+        
+        panelRuleta.add(ruletaVisual, BorderLayout.CENTER);
+        
         JPanel informacion = new JPanel(new BorderLayout());
-        JLabel texto = new JLabel("Pieza seleccionada:",SwingConstants.CENTER);
+        JLabel texto = new JLabel("Pieza seleccionada: ",SwingConstants.CENTER);
         texto.setFont(new Font("Arial", Font.BOLD, 16));
         pieza = new JLabel("???",SwingConstants.CENTER);
         pieza.setFont(new Font("Arial", Font.BOLD, 22));
         informacion.add(texto,BorderLayout.NORTH);
         informacion.add(pieza,BorderLayout.CENTER);
-        panelRuleta.add(informacion,BorderLayout.CENTER);
         girar = new JButton("Girar ruleta");
         girar.setFont(new Font("Arial", Font.BOLD, 18));
         
@@ -223,7 +301,11 @@ public class NuevaPartida extends JPanel{
             girarRuleta();
         });
         
-        panelRuleta.add(girar,BorderLayout.SOUTH);
+        JPanel parteAbajo = new JPanel(new BorderLayout());
+        parteAbajo.add(informacion, BorderLayout.CENTER);
+        parteAbajo.add(girar, BorderLayout.SOUTH);
+        panelRuleta.add(parteAbajo,BorderLayout.SOUTH);
+        actualizarRuleta();
     }
     
     private void escribir(String mensaje){
@@ -247,10 +329,10 @@ public class NuevaPartida extends JPanel{
         add(titulo, BorderLayout.NORTH);
         
         JPanel panelMain = new JPanel(new BorderLayout(10, 10));
-        //crearPanelRuleta();
         crearPanelTablero();
+        crearPanelRuleta();
         //crearPanelConsola();
-        //panelMain.add(panelRuleta,BorderLayout.WEST);
+        panelMain.add(panelRuleta,BorderLayout.WEST);
         panelMain.add(panelTablero,BorderLayout.CENTER);
         //panelMain.add(panelConsola,BorderLayout.EAST);
         add(panelMain,BorderLayout.CENTER);

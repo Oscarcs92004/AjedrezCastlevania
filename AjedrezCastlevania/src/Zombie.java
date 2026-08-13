@@ -24,4 +24,9 @@ public class Zombie extends Piezas{
         // no tiene se queda en blanco
     }
     
+    @Override
+    public boolean puedeMoverse(int nuevaFila, int nuevaColumna, Piezas[][] tablero){
+        return false;
+    }
+    
 }

@@ -10,6 +10,7 @@
  */
 public abstract class Piezas {
     private int vida;
+    private int vidaMaxima;
     private int danio;
     private int escudo;
     private int fila;
@@ -18,6 +19,7 @@ public abstract class Piezas {
     
     public Piezas(int vida, int danio, int escudo){
         this.vida = vida;
+        this.vidaMaxima = vida;
         this.danio = danio;
         this.escudo = escudo;
     }
@@ -41,6 +43,43 @@ public abstract class Piezas {
         return jugador;
     }
     
+    protected int getVidaMaxima(){
+        return vidaMaxima;
+    }
+    
+    public int getFila(){
+        return fila;
+    }
+    
+    public int getColumna(){
+        return columna;
+    }
+    
+    public void setPosicion(int fila, int columna){
+        this.fila = fila;
+        this.columna = columna;
+    }
+    
+    public int getVida(){
+        return vida;
+    }
+    
+    public int getDanio(){
+        return danio;
+    }
+    
+    public int getEscudo(){
+        return escudo;
+    }
+    
+    public boolean estaViva(){
+        return vida > 0;
+    }
+    
+    public void setVida(int vida){
+        this.vida = vida;
+    }
+    
     public void setJugador(int jugador){
         this.jugador = jugador;
     }
@@ -55,5 +94,32 @@ public abstract class Piezas {
         tablero[fila][columna] = this;
 
         return true;
+    }
+    
+    public boolean esAdyacente(int fil, int col){
+        int difFila = Math.abs(fil-fila);
+        int difColumna = Math.abs(col-columna);
+        return difFila <= 1 && difColumna <= 1 && (difFila + difColumna > 0);
+    }
+    
+    public void recibirDanio(int cantidad){
+        if(escudo > 0){
+            int absorbido = Math.min(escudo, cantidad);
+            escudo -= absorbido;
+            cantidad -= absorbido;
+        }
+        if(cantidad > 0){
+            vida -= cantidad;
+            if(vida < 0){
+                vida = 0;
+            }
+        }
+    }
+    
+    public void recibirDanioDirecto(int cantidad){
+        vida -= cantidad;
+        if(vida < 0){
+            vida = 0;
+        }
     }
 }

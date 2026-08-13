@@ -23,6 +23,9 @@ public class Vampiro extends Piezas{
     public void movimientoEspecial(){
 
     }
-    
   
+    public void curar(int cantidad){
+        int nuevaVida = Math.min(getVida()+cantidad, getVidaMaxima());
+        setVida(nuevaVida);
+    }
 }
