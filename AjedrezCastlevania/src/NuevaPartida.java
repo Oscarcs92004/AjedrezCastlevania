@@ -193,6 +193,13 @@ public class NuevaPartida extends JPanel{
             for (int columna = 0; columna < 6; columna++) {
                 JButton casilla = new JButton();
                 casilla.setPreferredSize( new Dimension(80, 80));
+                if((fila+columna)%2 == 0){
+                    casilla.setBackground(Color.WHITE);
+                } else {
+                    casilla.setBackground(Color.BLACK);
+                }
+                casilla.setOpaque(true);
+                casilla.setBorderPainted(false);
                 final int fil = fila;
                 final int col = columna;
                 casilla.addActionListener(e -> {
@@ -203,8 +210,8 @@ public class NuevaPartida extends JPanel{
             }
         }
         cargarImagenes();
-        colocarPiezas();
-        }
+        colocarPiezas();   
+    }
     
     private void girarRuleta(){
         
