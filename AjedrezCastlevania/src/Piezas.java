@@ -24,8 +24,16 @@ public abstract class Piezas {
         this.escudo = escudo;
     }
     
-    public abstract void ataque(); 
-    public abstract void movimientoEspecial();
+    public abstract void ataque(Piezas objetivo); 
+    public abstract String movimientoEspecial(Piezas objetivo, int fila, int columna, Piezas[][] tablero);
+    
+    public boolean tieneAtaqueEspecial(){
+        return false;
+    }
+    
+    public String nombreAtaqueEspecial(){
+        return null;
+    }
     
     public boolean puedeMoverse(int nuevaFila, int nuevaColumna, Piezas[][] tablero){
         if (nuevaFila < 0 || nuevaFila >= 6 || nuevaColumna < 0 || nuevaColumna >= 6) {

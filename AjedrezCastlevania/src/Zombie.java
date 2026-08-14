@@ -15,18 +15,17 @@ public class Zombie extends Piezas{
     }
     
     @Override
-    public void ataque(){
-    
+    public void ataque(Piezas objetivo){
+        objetivo.recibirDanio(getDanio());
     }
 
     @Override
-    public void movimientoEspecial(){
-        // no tiene se queda en blanco
+    public String movimientoEspecial(Piezas objetivo, int fila, int columna, Piezas[][] tablero){
+        return null;
     }
     
     @Override
     public boolean puedeMoverse(int nuevaFila, int nuevaColumna, Piezas[][] tablero){
         return false;
     }
-    
 }

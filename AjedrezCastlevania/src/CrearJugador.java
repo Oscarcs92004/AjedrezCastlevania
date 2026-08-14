@@ -44,6 +44,12 @@ public class CrearJugador extends JPanel{
             javax.swing.JOptionPane.showMessageDialog(this,"Las contraseñas no coinciden.","Error",javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        if(contra.length() != 5){
+            javax.swing.JOptionPane.showMessageDialog(this,"Las contraseña debe ser de exactamente 5 caracteres.","Error",javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
         boolean creado = Usuarios.crearUsuario(usuario,contra);
         if(creado){
             javax.swing.JOptionPane.showMessageDialog(this,"Jugador creado correctamente.");    

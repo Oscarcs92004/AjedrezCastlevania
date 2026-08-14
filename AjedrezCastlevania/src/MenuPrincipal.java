@@ -46,7 +46,7 @@ public class MenuPrincipal extends JPanel{
         panelBotones.add(cerrarSesion);
         add(panelBotones, BorderLayout.SOUTH);
         jugar.addActionListener(e->{
-            ventana.cambiarPanel( new NuevaPartida(ventana,usuario));
+            ventana.cambiarPanel(new NuevaPartida(ventana,usuario));
         });
         
         miCuenta.addActionListener(e->{

@@ -15,13 +15,13 @@ public class HombreLobo extends Piezas{
     }
     
     @Override
-    public void ataque(){
-    
+    public void ataque(Piezas objetivo){
+        objetivo.recibirDanio(getDanio());
     }
 
     @Override
-    public void movimientoEspecial(){
-
+    public String movimientoEspecial(Piezas objetivo, int fila, int columna, Piezas[][] tablero){
+        return null;
     }
     
     @Override

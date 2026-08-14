@@ -73,8 +73,8 @@ public class Usuarios {
         return null;
     }
     
-    public void aumentarPuntaje(){
-    
+    public void aumentarPuntos(){
+        this.puntos += 3;
     }
     
 }
