@@ -36,6 +36,10 @@ public class Usuarios {
     public String getContra() {
         return contra;
     }
+    
+    public void setContra(String contra){
+        this.contra = contra;
+    }
 
     public Calendar getFechaRegistro() {
         return fechaRegistro;
@@ -77,4 +81,7 @@ public class Usuarios {
         this.puntos += 3;
     }
     
+    public void desactivar(){
+        this.activo = false;
+    }
 }

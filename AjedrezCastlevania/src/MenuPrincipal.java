@@ -6,8 +6,11 @@
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 /**
@@ -21,6 +24,30 @@ public class MenuPrincipal extends JPanel{
     private JButton miCuenta;
     private JButton reportes;
     private JButton cerrarSesion;
+    
+    private Usuarios seleccionarOponente(){
+        ArrayList<Usuarios> todos = Usuarios.getU();
+        ArrayList<Usuarios> disponibles = new ArrayList<>();
+        for (Usuarios u : todos) {
+            if (u != usuario && u.isActivo()) {
+                disponibles.add(u);
+            }
+        }
+        if (disponibles.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay otro jugador registrado con quien jugar.","Sin oponentes disponibles", JOptionPane.INFORMATION_MESSAGE);
+            return null;
+        }
+        String[] nombres = new String[disponibles.size()];
+        for (int i = 0; i < disponibles.size(); i++) {
+            nombres[i] = disponibles.get(i).getNombre();
+        }
+        JComboBox<String> comboOponentes = new JComboBox<>(nombres);
+        int resultado = JOptionPane.showConfirmDialog(this, comboOponentes, "Selecciona tu oponente (Jugador 2)", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (resultado != JOptionPane.OK_OPTION) {
+            return null;
+        }
+        return disponibles.get(comboOponentes.getSelectedIndex());
+    }
     
     private void inicializar(){
         setLayout(new BorderLayout());
@@ -46,15 +73,23 @@ public class MenuPrincipal extends JPanel{
         panelBotones.add(cerrarSesion);
         add(panelBotones, BorderLayout.SOUTH);
         jugar.addActionListener(e->{
-            ventana.cambiarPanel(new NuevaPartida(ventana,usuario));
+            Usuarios oponente  = seleccionarOponente();
+            if(oponente == null){
+                return;
+            }
+            if(oponente == usuario){
+                JOptionPane.showMessageDialog(this, "No puedes seleccionarte a ti mismo como oponente.","Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            ventana.cambiarPanel(new NuevaPartida(ventana,usuario,oponente));
         });
         
         miCuenta.addActionListener(e->{
-            // falta crear clase
+            ventana.cambiarPanel(new CuentaJugador(ventana, usuario));
         });
         
         reportes.addActionListener(e->{
-            // falta crear clase
+            ventana.cambiarPanel(new Reportes(ventana, usuario));
         });
         
         cerrarSesion.addActionListener(e->{

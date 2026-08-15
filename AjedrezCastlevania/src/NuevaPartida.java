@@ -189,11 +189,11 @@ public class NuevaPartida extends JPanel{
                     }
                 } else {
                     if (tipo == 0) {
-                        posicion = 3;
+                        posicion = 5;
                     } else if (tipo == 1) {
                         posicion = 4;
                     } else {
-                        posicion = 5;
+                        posicion = 3;
                     }
                 }
                 if (jugador == 1) {
@@ -322,11 +322,12 @@ public class NuevaPartida extends JPanel{
         }
         if (piezasJugador1 == 0 || piezasJugador2 == 0) {
             juegoTerminado = true;
-            int ganador = piezasJugador1 == 0 ? 2 : 1;
-            int perdedor = 3 - ganador;
-            escribir(nombreJugador(ganador) + " venció a " + nombreJugador(perdedor) + ". ¡Felicidades, has ganado 3 puntos!");
+            Usuarios ganador = piezasJugador1 == 0 ? jugador2 : jugador1;
+            Usuarios perdedor = piezasJugador1 == 0 ? jugador1 : jugador2;
             girar.setEnabled(false);
-            JOptionPane.showMessageDialog(this, nombreJugador(ganador) + " venció a " + nombreJugador(perdedor) + ".\n¡Felicidades, has ganado 3 puntos!", "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
+            String mensaje = ganador.getNombre() + " venció a " + perdedor.getNombre() + ". ¡Felicidades, has ganado 3 puntos!";
+            escribir(mensaje);
+            JOptionPane.showMessageDialog(this, mensaje, "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
         }
     }
     
@@ -401,11 +402,8 @@ public class NuevaPartida extends JPanel{
     private void manejarDestinoVacio(Piezas piezaOrigen, int fila, int columna){
         if (piezaOrigen instanceof Necromante) {
             boolean adyacente = piezaOrigen.esAdyacente(fila, columna);
-            Object[] opciones = adyacente
-                    ? new Object[]{"Mover Necrómante", "Invocar Zombie", "Cancelar"}
-                    : new Object[]{"Invocar Zombie", "Cancelar"};
-            int eleccion = JOptionPane.showOptionDialog(this, "¿Qué deseas hacer en esa casilla?", "Necrómante",
-                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+            Object[] opciones = adyacente ? new Object[]{"Mover Necrómante", "Invocar Zombie", "Cancelar"} : new Object[]{"Invocar Zombie", "Cancelar"};
+            int eleccion = JOptionPane.showOptionDialog(this, "¿Qué deseas hacer en esa casilla?", "Necrómante", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
             if (adyacente && eleccion == 0) {
                 if (piezaOrigen.mover(fila, columna, piezasTablero)) {
                     actualizarTablero();
@@ -786,25 +784,6 @@ public class NuevaPartida extends JPanel{
         consola.setCaretPosition(consola.getDocument().getLength());
     }
     
-    private void seleccionOponente(){
-        ArrayList<Usuarios> usuarios = Usuarios.getU();
-        if (usuarios == null || usuarios.isEmpty()) {
-            JOptionPane.showMessageDialog(this,"No hay usuarios registrados.","Error",JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String[] nombres = new String[usuarios.size()];
-        for (int i = 0; i < usuarios.size(); i++) {
-            nombres[i] = usuarios.get(i).getNombre();
-        }
-        JComboBox<String> comboUsuarios = new JComboBox<>(nombres);
-        int resultado = JOptionPane.showConfirmDialog(this,comboUsuarios,"Seleccione el Jugador 2",JOptionPane.OK_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE);
-        if (resultado == JOptionPane.OK_OPTION) {
-            int indice = comboUsuarios.getSelectedIndex();
-            jugador2 = usuarios.get(indice);
-            JOptionPane.showMessageDialog(this,"Jugador 2 seleccionado: "+ jugador2.getNombre(),"Jugador seleccionado",JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-    
     private void crearPanelConsola(){
         panelConsola = new JPanel(new BorderLayout());
         panelConsola.setBorder(BorderFactory.createTitledBorder("Consola"));
@@ -818,6 +797,11 @@ public class NuevaPartida extends JPanel{
         
         javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(consola);
         panelConsola.add(scroll, BorderLayout.CENTER);
+    }
+    
+    private void registrarPartida(Usuarios ganador, Usuarios perdedor, String tipoFinalizacion){
+        ganador.aumentarPuntos();
+        Historial.agregarRegistro(new RegistroPartida(jugador1, jugador2, ganador, perdedor, tipoFinalizacion));
     }
     
     private void finalizarPartidaPorRetiro() {
@@ -835,9 +819,7 @@ public class NuevaPartida extends JPanel{
         } else {
             ganador = jugador2;
         }
-        ganador.aumentarPuntos();
-// falta implementar metodo registrarPartida        
-//registrarPartida(perdedor,ganador,"DERROTA POR RETIRO");
+        registrarPartida(perdedor,ganador,"DERROTA POR RETIRO");
         JOptionPane.showMessageDialog(this,"La partida ha finalizado.\n\n Ganador: " + ganador.getNombre() + "\n Perdedor: " + perdedor.getNombre() + "\n\n"+ ganador.getNombre()+ " recibe 3 puntos de victoria.","Partida finalizada",JOptionPane.INFORMATION_MESSAGE);
         ventana.cambiarPanel(new MenuPrincipal(ventana,jugador1));
     }
@@ -887,20 +869,22 @@ public class NuevaPartida extends JPanel{
         
         add(finalizar,BorderLayout.SOUTH);
     }
-    
-    private void seleccionar(){
-        seleccionOponente();
-        escribir("¡Comienza la partida entre " + jugador1.getNombre() + " y " + jugador2 + "!");
-        escribir("Turno de " + nombreJugador(jugadorActual) + ". Gira la ruleta.");
+
+    private boolean partidaValida(){
+        return jugador1 != null && jugador2 != null && jugador1 != jugador2;
     }
     
-    public NuevaPartida(GUI ventana, Usuarios jugador1){
+    public NuevaPartida(GUI ventana, Usuarios jugador1, Usuarios jugador2){
         this.ventana = ventana;
         this.jugador1 = jugador1;
+        this.jugador2 = jugador2;
         
         random = new Random();
-        seleccionar();
         inicializar();
+        if (partidaValida()) {
+            escribir("¡Comienza la partida entre " + jugador1.getNombre() + " y " + jugador2.getNombre() + "!");
+            escribir("Turno de " + nombreJugador(jugadorActual) + ". Gira la ruleta.");
+        }
     }
     
 }
