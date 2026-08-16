@@ -352,10 +352,12 @@ public class NuevaPartida extends JPanel{
             juegoTerminado = true;
             Usuarios ganador = piezasJugador1 == 0 ? jugador2 : jugador1;
             Usuarios perdedor = piezasJugador1 == 0 ? jugador1 : jugador2;
+            registrarPartida(ganador, perdedor, "ELIMINACION");
             girar.setEnabled(false);
             String mensaje = ganador.getNombre() + " venció a " + perdedor.getNombre() + ". ¡Felicidades, has ganado 3 puntos!";
             escribir(mensaje);
             JOptionPane.showMessageDialog(this, mensaje, "Fin del juego", JOptionPane.INFORMATION_MESSAGE);
+            ventana.cambiarPanel(new MenuPrincipal(ventana, jugador1));
         }
     }
     
@@ -612,6 +614,22 @@ public class NuevaPartida extends JPanel{
     
     private void finalizarGiroRuleta() {
         girandoRuleta = false;
+        if(!posicionDisponible(posicionResultado)){
+            for (int i = 0; i < 6; i++) {
+                iconosRuleta[i].setBorder(null);
+            }
+            int permitidos = girosPermitidos(jugadorActual);
+            String tipoFallido = tipoPorPosicion(posicionResultado);
+            if (girosUsados < permitidos) {
+                escribir("La ruleta indicó " + tipoFallido + ", pero ya no tienes ninguno. Giro " + girosUsados + "/" + permitidos + ". Gira de nuevo.");
+                pieza.setText("???");
+                girar.setEnabled(true);
+            } else {
+                escribir("La ruleta indicó " + tipoFallido + " y agotaste tus " + permitidos + " giro(s). Pierdes el turno.");
+                terminarTurno();
+            }
+            return;
+        }     
         String elegido = tipoPorPosicion(posicionResultado);
         tipoPermitido = elegido;
         pieza.setText(elegido);
@@ -653,46 +671,17 @@ public class NuevaPartida extends JPanel{
     }
     
     private boolean posicionDisponible(int posicion) {
-        String tipo = tipoPorPosicion(posicion);
-        int cantidad = 0;
-        for (int fila = 0; fila < 6; fila++) {
-            for (int columna = 0; columna < 6; columna++) {
-                Piezas p = piezasTablero[fila][columna];
-                if (p == null) {
-                    continue;
-                }
-                if (p.getJugador() != jugadorActual) {
-                    continue;
-                }
-                if (nombreTipo(p).equals(tipo)) {
-                    cantidad++;
-                }
-            }
-        }
-        if (posicion <= 2) {
-            return cantidad >= 1;
-        }
-        return cantidad >= 2;
+        Piezas[] ruletaActual = obtenerRuletaActual();
+        Piezas pieza = ruletaActual[posicion];
+        return pieza != null && pieza.estaViva();
     }
     
     private void girarRuleta(){
         if (juegoTerminado || tipoPermitido != null || girandoRuleta) {
         return;
         }
-        int[] disponibles = new int[6];
-        int cantidadDisponibles = 0;
-        for (int i = 0; i < 6; i++) {
-            if (posicionDisponible(i)) {
-                disponibles[cantidadDisponibles] = i;
-                cantidadDisponibles++;
-            }
-        }
-        if (cantidadDisponibles == 0) {
-            JOptionPane.showMessageDialog(this,"El jugador ya no tiene piezas disponibles para la ruleta.");
-            terminarTurno();
-            return;
-        }
-        posicionResultado = disponibles[random.nextInt(cantidadDisponibles)];
+        girosUsados++;
+        posicionResultado = random.nextInt(6);
         iniciarAnimacionRuleta();
     }
     
@@ -842,7 +831,7 @@ public class NuevaPartida extends JPanel{
         } else {
             ganador = jugador2;
         }
-        registrarPartida(perdedor,ganador,"DERROTA POR RETIRO");
+        registrarPartida(ganador,perdedor,"RETIRO");
         JOptionPane.showMessageDialog(this,"La partida ha finalizado.\n\n Ganador: " + ganador.getNombre() + "\n Perdedor: " + perdedor.getNombre() + "\n\n"+ ganador.getNombre()+ " recibe 3 puntos de victoria.","Partida finalizada",JOptionPane.INFORMATION_MESSAGE);
         ventana.cambiarPanel(new MenuPrincipal(ventana,jugador1));
     }
