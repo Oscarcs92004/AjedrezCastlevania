@@ -29,6 +29,7 @@ public class GUI extends JFrame{
     private JButton salir;
     private JLabel titulo;
     private JPanel panel;
+    private JButton guiaPiezas;
     
     public void mostrarMenu(){
         getContentPane().removeAll();
@@ -76,16 +77,20 @@ public class GUI extends JFrame{
         iniciar = new JButton("Iniciar sesion");
         salir = new JButton("Salir");
         crearJugador = new JButton("Crear Jugador");
+        guiaPiezas = new JButton("Guía de piezas");
         Dimension tamanioBoton = new Dimension(250,60);
         iniciar.setPreferredSize(tamanioBoton);
         salir.setPreferredSize(tamanioBoton);
         crearJugador.setPreferredSize(tamanioBoton);
+        guiaPiezas.setPreferredSize(tamanioBoton);
         iniciar.setFont(new Font("Arial",Font.BOLD, 18));
         salir.setFont(new Font("Arial",Font.BOLD, 18));
         crearJugador.setFont(new Font("Arial",Font.BOLD, 18));
+        guiaPiezas.setFont(new Font("Arial",Font.BOLD, 18));
         
         botones.add(iniciar);
         botones.add(crearJugador);
+        botones.add(guiaPiezas);
         botones.add(salir);
         
         JPanel contenedorBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -103,6 +108,10 @@ public class GUI extends JFrame{
         
         crearJugador.addActionListener(e-> {
             cambiarPanel(new CrearJugador(this));
+        });
+        
+        guiaPiezas.addActionListener(e-> {
+            cambiarPanel(new GuiaPiezas(this));
         });
         
         setVisible(true);        

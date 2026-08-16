@@ -92,7 +92,7 @@ public abstract class Piezas {
         this.jugador = jugador;
     }
     
-    public boolean mover(int nuevaFila, int nuevaColumna, Piezas[][] tablero){
+    public final boolean mover(int nuevaFila, int nuevaColumna, Piezas[][] tablero){
          if (!puedeMoverse(nuevaFila,nuevaColumna,tablero)) {
             return false;
         }
@@ -104,13 +104,13 @@ public abstract class Piezas {
         return true;
     }
     
-    public boolean esAdyacente(int fil, int col){
+    public final boolean esAdyacente(int fil, int col){
         int difFila = Math.abs(fil-fila);
         int difColumna = Math.abs(col-columna);
         return difFila <= 1 && difColumna <= 1 && (difFila + difColumna > 0);
     }
     
-    public void recibirDanio(int cantidad){
+    public final void recibirDanio(int cantidad){
         if(escudo > 0){
             int absorbido = Math.min(escudo, cantidad);
             escudo -= absorbido;
@@ -124,7 +124,7 @@ public abstract class Piezas {
         }
     }
     
-    public void recibirDanioDirecto(int cantidad){
+    public final void recibirDanioDirecto(int cantidad){
         vida -= cantidad;
         if(vida < 0){
             vida = 0;

@@ -10,7 +10,7 @@
  */
 import java.util.ArrayList;
 
-public class Historial {
+public final class Historial {
     private static ArrayList<RegistroPartida> registros = new ArrayList<>();
     
     public static void agregarRegistro(RegistroPartida registro){

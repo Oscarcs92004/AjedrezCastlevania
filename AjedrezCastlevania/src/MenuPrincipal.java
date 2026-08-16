@@ -26,7 +26,7 @@ public class MenuPrincipal extends JPanel{
     private JButton cerrarSesion;
     
     private Usuarios seleccionarOponente(){
-        ArrayList<Usuarios> todos = Usuarios.getU();
+        ArrayList<Usuarios> todos = GestorUsuarios.getInstancia().obtenerTodos();
         ArrayList<Usuarios> disponibles = new ArrayList<>();
         for (Usuarios u : todos) {
             if (u != usuario && u.isActivo()) {

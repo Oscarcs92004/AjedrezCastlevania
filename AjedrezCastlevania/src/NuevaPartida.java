@@ -813,7 +813,7 @@ public class NuevaPartida extends JPanel{
     
     private void registrarPartida(Usuarios ganador, Usuarios perdedor, String tipoFinalizacion){
         ganador.aumentarPuntos();
-        Historial.agregarRegistro(new RegistroPartida(jugador1, jugador2, ganador, perdedor, tipoFinalizacion));
+        GestorHistorial.getInstancia().agregar(new RegistroPartida(jugador1, jugador2, ganador, perdedor, tipoFinalizacion));
     }
     
     private void finalizarPartidaPorRetiro() {

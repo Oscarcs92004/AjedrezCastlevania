@@ -38,7 +38,7 @@ public class Login extends JPanel{
             JOptionPane.showMessageDialog( this,"Ingrese usuario y contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        Usuarios usuarioEncontrado = Usuarios.iniciarSesion(user, contraseña);
+        Usuarios usuarioEncontrado = GestorUsuarios.getInstancia().iniciarSesion(user, contraseña);
         if (usuarioEncontrado != null) {
             JOptionPane.showMessageDialog( this, "Inicio de sesión exitoso.");
             ventana.cambiarPanel(new MenuPrincipal(ventana,usuarioEncontrado));

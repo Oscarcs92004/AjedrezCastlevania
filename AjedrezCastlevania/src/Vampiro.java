@@ -11,7 +11,7 @@
 public class Vampiro extends Piezas{
     private static final int danioAbsorcion = 1;
     public Vampiro(){
-        super(3,4,5);
+        super(4,3,5);
     }
     
     @Override

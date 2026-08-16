@@ -13,7 +13,7 @@ public class Necromante extends Piezas{
     private static final int danioZombie = 1;
     
     public Necromante(){
-        super(4,3,1);
+        super(3,4,1);
     }
     
     @Override

@@ -50,7 +50,7 @@ public class CrearJugador extends JPanel{
             return;
         }
         
-        boolean creado = Usuarios.crearUsuario(usuario,contra);
+        boolean creado = GestorUsuarios.getInstancia().crearUsuario(usuario,contra);
         if(creado){
             javax.swing.JOptionPane.showMessageDialog(this,"Jugador creado correctamente.");    
             txtUser.setText("");
@@ -91,20 +91,28 @@ public class CrearJugador extends JPanel{
         JLabel contra = new JLabel("Contraseña: ");
         txtContra = new JPasswordField();
         txtContra.setPreferredSize(new Dimension(300,40));
+        JPanel panelContra = new JPanel(new BorderLayout());
+        JButton mostrarContra = new JButton("👁");
+        panelContra.add(txtContra, BorderLayout.CENTER);
+        panelContra.add(mostrarContra, BorderLayout.EAST);
         limites.gridx = 0;
         limites.gridy = 1;
         formulario.add(contra, limites);
         limites.gridx = 1;
-        formulario.add(txtContra, limites);
+        formulario.add(panelContra, limites);
         
         JLabel confirmar = new JLabel("Confirmar contraseña: ");
         txtConfirmar = new JPasswordField();
         txtConfirmar.setPreferredSize(new Dimension(300,40));
+        JPanel panelConfirmar = new JPanel(new BorderLayout());
+        JButton mostrarConfirmar = new JButton("👁");
+        panelConfirmar.add(txtConfirmar, BorderLayout.CENTER);
+        panelConfirmar.add(mostrarConfirmar, BorderLayout.EAST);
         limites.gridx = 0;
         limites.gridy = 2;
         formulario.add(confirmar, limites);
         limites.gridx = 1;
-        formulario.add(txtConfirmar, limites);
+        formulario.add(panelConfirmar, limites);
      
         crear = new JButton("Crear Jugador");
         regresar = new JButton("Regresar");
@@ -129,6 +137,23 @@ public class CrearJugador extends JPanel{
         
         crear.addActionListener(e-> {
             crearJugador();
+        });
+        char caracterOcultoContra = txtContra.getEchoChar();
+        mostrarContra.addActionListener(e -> {
+            if (txtContra.getEchoChar() == (char) 0) {
+                txtContra.setEchoChar(caracterOcultoContra);
+            } else {
+                txtContra.setEchoChar((char) 0);
+            }
+        });
+        
+        char caracterOcultoConfirmar = txtConfirmar.getEchoChar();
+        mostrarConfirmar.addActionListener(e -> {
+            if (txtConfirmar.getEchoChar() == (char) 0) {
+                txtConfirmar.setEchoChar(caracterOcultoConfirmar);
+            } else {
+                txtConfirmar.setEchoChar((char) 0);
+            }
         });
     }
     

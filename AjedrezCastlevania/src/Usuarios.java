@@ -57,14 +57,21 @@ public class Usuarios {
         u.add(user);
     }
     
-     public static boolean crearUsuario(String nombre,String contra) {
-        for (Usuarios usuario : u) {
-            if (usuario.getNombre().equalsIgnoreCase(nombre)) {
-                return false;
-            }
+    private static boolean existeUsuario(String nombre, int indice){
+        if (indice >= u.size()) {
+            return false;
         }
-        Usuarios nuevoUsuario = new Usuarios(nombre, contra);
-        u.add(nuevoUsuario);
+        if (u.get(indice).getNombre().equalsIgnoreCase(nombre)) {
+            return true;
+        }
+        return existeUsuario(nombre, indice + 1);
+    }
+    
+    public static boolean crearUsuario(String nombre,String contra) {
+        if(existeUsuario(nombre,0)){
+            return false;
+        }
+        u.add(new Usuarios(nombre,contra));
         return true;
     }
      

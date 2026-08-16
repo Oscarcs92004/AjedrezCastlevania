@@ -31,7 +31,7 @@ public class Reportes extends JPanel{
     
     private JPanel crearPanelRanking(){
         ArrayList<Usuarios> activos = new ArrayList<>();
-        for (Usuarios u : Usuarios.getU()) {
+        for (Usuarios u : GestorUsuarios.getInstancia().obtenerTodos()) {
             if (u.isActivo()) {
                 activos.add(u);
             }
@@ -69,7 +69,7 @@ public class Reportes extends JPanel{
     
     
     private JPanel crearPanelHistorial(){
-        ArrayList<RegistroPartida> registros = Historial.getRegistrosDe(usuario);
+        ArrayList<RegistroPartida> registros = GestorHistorial.getInstancia().obtenerDe(usuario);
         
         JTextArea texto = new JTextArea();
         texto.setEditable(false);
