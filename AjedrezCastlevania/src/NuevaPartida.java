@@ -286,10 +286,38 @@ public class NuevaPartida extends JPanel{
         return jugador2.getNombre();
     }
     
-    private void limpiarSeleccion(){
-        if (filaSeleccionada != -1) {
-            tablero[filaSeleccionada][columnaSeleccionada].setBorder(null);
+    
+    private void limpiarResaltados(){
+        for (int fila = 0; fila < 6; fila++) {
+            for (int columna = 0; columna < 6; columna++) {
+                tablero[fila][columna].setBorder(null);
+                tablero[fila][columna].setBorderPainted(false);
+            }
         }
+    }
+    
+    private void resaltarDestinos(Piezas pieza){
+        for (int fila = 0; fila < 6; fila++) {
+            for (int columna = 0; columna < 6; columna++) {
+                if (pieza.puedeMoverse(fila, columna, piezasTablero)) {
+                    tablero[fila][columna].setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+                    tablero[fila][columna].setBorderPainted(true);
+                }
+            }
+        }
+    }
+    
+    private void seleccionarCasilla(int fila, int columna, Piezas pieza){
+        limpiarResaltados();
+        filaSeleccionada = fila;
+        columnaSeleccionada = columna;
+        tablero[fila][columna].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 3));
+        tablero[fila][columna].setBorderPainted(true);
+        resaltarDestinos(pieza);
+    }
+    
+    private void limpiarSeleccion(){
+        limpiarResaltados();
         filaSeleccionada = -1;
         columnaSeleccionada = -1;
     }
@@ -435,7 +463,7 @@ public class NuevaPartida extends JPanel{
     }
     
     private void seleccionarPieza(int fila, int columna){
-    if (juegoTerminado) {
+        if (juegoTerminado) {
             return;
         }
         if (tipoPermitido == null) {
@@ -455,9 +483,7 @@ public class NuevaPartida extends JPanel{
                 escribir("La ruleta indica que debes mover: " + tipoPermitido);
                 return;
             }
-            filaSeleccionada = fila;
-            columnaSeleccionada = columna;
-            tablero[fila][columna].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 3));
+            seleccionarCasilla(fila,columna,piezaClic);
             return;
         }
         if (fila == filaSeleccionada && columna == columnaSeleccionada) {
@@ -471,10 +497,7 @@ public class NuevaPartida extends JPanel{
                 escribir("La ruleta indica que debes mover: " + tipoPermitido);
                 return;
             }
-            limpiarSeleccion();
-            filaSeleccionada = fila;
-            columnaSeleccionada = columna;
-            tablero[fila][columna].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 3));
+            seleccionarCasilla(fila,columna, piezaClic);
             return;
         }
         if (piezaClic != null && piezaClic.getJugador() != jugadorActual) {
